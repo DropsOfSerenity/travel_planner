@@ -37,6 +37,25 @@ let trips = {
     })
   },
 
+  editTrip (id, data) {
+    if (!auth.isAuthenticated()) return Promise.reject(false)
+
+    return request.patch(`http://localhost:3001/v1/trips/${id}`, 
+      data,
+      { 
+        headers: {
+          'Authorization': localStorage.access_token
+        }
+      }
+    )
+    .then(response => {
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      return Promise.reject(error.response.data.error)
+    })
+  },
+
   deleteTrip (id) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 

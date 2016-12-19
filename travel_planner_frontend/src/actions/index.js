@@ -15,7 +15,11 @@ import {
   DELETE_TRIP,
   RESET_TRIPS,
   FETCH_TRIP,
-  RESET_ACTIVE_TRIP
+  RESET_ACTIVE_TRIP,
+  RESET_EDIT_TRIP,
+  EDIT_TRIP_FETCH,
+  EDIT_TRIP,
+  EDIT_TRIP_CHANGE_FORM
 } from './constants'
 
 export function changeForm(newFormState) {
@@ -86,3 +90,18 @@ export function deleteTripRequest (id) {
   return {type: DELETE_TRIP, id}
 }
 
+export function resetEditTrip () {
+  return {type: RESET_EDIT_TRIP}
+}
+
+export function editTripFetch (id) {
+  return {type: EDIT_TRIP_FETCH, id}
+}
+
+export function editTripChangeForm (newFormState) {
+  return {type: EDIT_TRIP_CHANGE_FORM, newFormState}
+}
+
+export function editTrip (id, data) {
+  return {type: EDIT_TRIP, id, data: {trip: {...data}}}
+}

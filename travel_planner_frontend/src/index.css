@@ -6,12 +6,17 @@ html {
   box-sizing: inherit;
 }
 
+a {
+  text-decoration: none;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
+  background: #f2f2f2;
 }
 
 body {
@@ -231,13 +236,6 @@ body {
   display: flex;
 }
 
-.js-form__err--user-doesnt-exist .form__error--username-not-registered,
-.js-form__err--username-exists .form__error--username-taken,
-.js-form__err--password-wrong .form__error--wrong-password,
-.js-form__err--field-missing .form__error--field-missing {
-  display: inline-block;
-}
-
 @keyframes shake {
   0% {
     transform: translateX(0);
@@ -260,42 +258,66 @@ body {
 
 .trip-page__list-wrapper {
   width: 100%;
+  margin: 1.5em auto;
+}
+
+.trip-item__wrapper {
+  padding-bottom: 1em;
+  width: 48%;
+  float: left;
+  margin-bottom: 5%;
+}
+.trip-item__wrapper:nth-child(even) {
+  margin-left: 4%;
 }
 
 .trip-item {
+  display: block;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+.trip-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.16);
+}
+
+.trip-item__title {
+  position: relative;
+  padding: 16px;
+  height: 140px;
+  top: 0;
+  width: 100%;
+  text-align: left;
   border-bottom: 1px solid #eee;
-  padding-bottom: 1em;
-}
-
-.trip-item__day_badge {
-  font-weight: bold;
-  color: #333;
-  font-size: 0.9em;
-  padding: 0;
-}
-
-.trip-item__spacer {
-  padding: 0 1em;
-  font-weight: bold;
-  color: #333;
-}
-
-.trip-item__destination {
-  text-decoration: none;
+  font-size: 1.25em;
   color: #3498db;
-}
-.trip-item__destination h2 {
-  margin-bottom: 0px;
-}
-.trip-item__destination:hover {
-  color: #2980b9;
+  overflow: hidden;
 }
 
-.trip-item__days {
-  color: #999;
-  text-transform: uppercase;
+.trip-item__time-until {
   font-weight: bold;
   font-size: 0.9em;
+  position: absolute;
+  left: 16px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.trip-item__start-date {
+  position: absolute;
+  right: 16px;
+  font-size: 0.9em;
+  color: #333;
+  font-weight: 300;
+}
+
+.trip-item__info {
+  padding: 16px;
+  position: relative;
+  height: 48px;
+  overflow: hidden;
 }
 
 .three-bounce > div {
@@ -400,7 +422,7 @@ body {
   transition: all 0.2s;
   font-size: 0.9em;
   border: none;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #ccc;
   padding: .4em 0;
   background: transparent;
   color: #333;
@@ -414,7 +436,7 @@ body {
 
 .filters__right {
   width: auto;
-  right: 0;
+  left: 0;
   padding: 0;
   top: 34px;
   background: transparent;

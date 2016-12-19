@@ -17,6 +17,7 @@ import Login from './components/Login';
 import TripList from './components/TripList';
 import NewTrip from './components/NewTrip';
 import TripDetail from './components/TripDetail';
+import TripEdit from './components/TripEdit';
 
 import tripApp from './reducers'
 
@@ -55,6 +56,7 @@ const router = (
           <Route path="/dash" component={TripList}></Route>
           <Route path="/trip/new" component={NewTrip}></Route>
           <Route path="/trip/:tripId" component={TripDetail}></Route>
+          <Route path="/trip/:tripId/edit" component={TripEdit}></Route>
         </Route>
         <Route onEnter={ensureLoggedOut}>
           <Route path="/" component={Home}></Route>

@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchTrip, resetActiveTrip} from '../actions/index'
+import {deleteTripRequest, fetchTrip, resetActiveTrip} from '../actions/index'
 import moment from 'moment'
 import Spinner from 'react-spinkit'
+import {Link} from 'react-router'
 
 class TripList extends Component {
   
@@ -18,6 +19,16 @@ class TripList extends Component {
     return moment(date).format('MMMM Do, YYYY')
   }
 
+  tripLength(trip) {
+    let start = moment(trip.start_date)
+    let end = moment(trip.end_date)
+    return `${end.diff(start, 'days')} days`
+  }
+
+  _delete (id) {
+    this.props.dispatch(deleteTripRequest(id))
+  }
+
   render() {
     let trip = this.props.data.trip
     let {loading} = this.props.data
@@ -25,7 +36,7 @@ class TripList extends Component {
     if (loading) {
       return (
         <div className='form-page__wrapper'>
-          <Spinner spinnerName='three-bounce' noFadeIn />
+          <Spinner spinnerName='three-bounce' />
         </div>
       )
     } else if (!trip) {
@@ -33,14 +44,14 @@ class TripList extends Component {
     } 
 
     return (
-      <article className="trip-item" key={trip.id}>
-        <p className="trip-item__day_badge">
-          {this.dateFormat(trip.start_date)}
-          <span className="trip-item__spacer">•</span>
-          <span className="trip-item__days">{trip.start_date}</span>
-        </p>
-        <h2 className="trip-item__destination">Destination: {trip.destination}</h2>
+      <article>
+        <h2>Destination: {trip.destination}</h2>
+        <p>Trip Starts on {this.dateFormat(trip.start_date)}</p>
+        <p>Trip Ends on {this.dateFormat(trip.end_date)}</p>
+        <p>Trip Duration: {this.tripLength(trip)}</p>
         <p className="trip-item__comment">{trip.comment || 'No comments.'}</p>
+        <Link to={`/trip/${trip.id}/edit`} >Edit</Link>
+        <a href="#" onClick={this._delete.bind(this, trip.id)}>Delete</a>
       </article>
     )
   }

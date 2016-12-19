@@ -14,7 +14,9 @@ import {
   FETCH_TRIPS, FETCH_TRIPS_SUCCESS, FETCH_TRIPS_ERROR, RESET_TRIPS,
   NEW_TRIP, NEW_TRIP_SUCCESS, NEW_TRIP_ERROR,
   DELETE_TRIP,
-  FETCH_TRIP, FETCH_TRIP_SUCCESS, FETCH_TRIP_ERROR
+  FETCH_TRIP, FETCH_TRIP_SUCCESS, FETCH_TRIP_ERROR,
+  EDIT_TRIP, EDIT_TRIP_ERROR, EDIT_TRIP_SUCCESS, 
+  EDIT_TRIP_FETCH, EDIT_TRIP_FETCH_SUCCESS, EDIT_TRIP_FETCH_ERROR
 } from '../actions/constants'
 
 // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -101,10 +103,16 @@ export function * deleteTripSaga() {
     let request = yield take(DELETE_TRIP)
     let {id} = request
 
-    let response = yield call(trips.deleteTrip, id)
+    let response
+    try {
+      response = yield call(trips.deleteTrip, id)
+    } catch (error) {
+      browserHistory.push('/dash')
+      continue
+    }
 
     if (response) {
-      yield put({type: FETCH_TRIPS})
+      browserHistory.push('/dash')
     }
   }
 }
@@ -129,6 +137,45 @@ export function * fetchTripSaga () {
   }
 }
 
+export function * editTripSaga () {
+  while(true) {
+    let request = yield take(EDIT_TRIP)
+    
+    let response
+    try {
+      response = yield call(trips.editTrip, request.id, request.data)
+    } catch (error) {
+      yield put({type: EDIT_TRIP_ERROR, error})
+      continue
+    } 
+    
+    if (response) {
+      yield put({type: EDIT_TRIP_SUCCESS, trip: response})
+      browserHistory.push('/dash')
+    }
+  }
+}
+
+export function * editTripFetchSaga () {
+  while(true) {
+    let request = yield take(EDIT_TRIP_FETCH)
+    let {id} = request
+
+    let response
+    try {
+      response = yield call(trips.fetchTrip, id)
+    } catch (error) {
+      yield put({type: EDIT_TRIP_FETCH_ERROR, error})
+      browserHistory.push('/dash')
+      continue
+    }
+
+    if (response) {
+      yield put({type: EDIT_TRIP_FETCH_SUCCESS, trip: response})
+    }
+  }
+}
+
 export default function * root () {
   yield fork(loginSaga)
   yield fork(logoutSaga)
@@ -136,4 +183,6 @@ export default function * root () {
   yield fork(newTripSaga)
   yield fork(deleteTripSaga)
   yield fork(fetchTripSaga)
+  yield fork(editTripSaga)
+  yield fork(editTripFetchSaga)
 }
