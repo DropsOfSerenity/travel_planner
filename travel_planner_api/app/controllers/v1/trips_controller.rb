@@ -13,7 +13,7 @@ module V1
     end
 
     def index
-      @trips = policy_scope(Trip)
+      @trips = policy_scope(Trip).order(created_at: :desc)
       authorize @trips
       render json: @trips, each_serializer: TripSerializer
     end
