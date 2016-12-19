@@ -6,7 +6,7 @@ import Spinner from 'react-spinkit'
 import {Link} from 'react-router'
 
 class TripList extends Component {
-  
+
   componentDidMount () {
     this.props.dispatch(fetchTrip(this.props.params.tripId))
   }
@@ -41,11 +41,12 @@ class TripList extends Component {
       )
     } else if (!trip) {
       return (<span />)
-    } 
+    }
 
     return (
       <article>
-        <h2>Destination: {trip.destination}</h2>
+        <h2>My 5 day trip</h2>
+        <h2>{trip.destination}</h2>
         <p>Trip Starts on {this.dateFormat(trip.start_date)}</p>
         <p>Trip Ends on {this.dateFormat(trip.end_date)}</p>
         <p>Trip Duration: {this.tripLength(trip)}</p>

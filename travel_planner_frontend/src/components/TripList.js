@@ -5,6 +5,23 @@ import {fetchTrips} from '../actions/index'
 import {Link} from 'react-router'
 import Spinner from 'react-spinkit'
 import TripListFilters from './TripListFilters'
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+
+const ListGoogleMap = withGoogleMap(props => (
+  <GoogleMap
+    ref={props.onMapLoad}
+    defaultZoom={3}
+    defaultCenter={props.defaultCenter}
+    onClick={props.onMapClick}
+  >
+    {props.markers.map((marker, index) => (
+      <Marker
+        {...marker}
+        onRightClick={() => props.onMarkerRightClick(index)}
+      />
+    ))}
+  </GoogleMap>
+));
 
 class TripList extends Component {
 
@@ -63,7 +80,17 @@ class TripList extends Component {
             <article className="trip-item__wrapper" key={trip.id}>
               <Link to={'/trip/' + trip.id} className="trip-item">
                 <div className="trip-item__title">
-                  {trip.destination}
+                  <span className="trip-item__title-text">{trip.destination}</span>
+                  <ListGoogleMap
+                    containerElement={
+                      <div className="trip-item__map-container" />
+                    }
+                    mapElement={
+                      <div className='trip-item__map'/>
+                    }
+                    defaultCenter={{lat: trip.latitude, lng: trip.longitude}}
+                    markers={[{position: {lat: trip.latitude, lng: trip.longitude}, key: trip.destination}]}>
+                  </ListGoogleMap>
                 </div>
 
                 <div className="trip-item__info">

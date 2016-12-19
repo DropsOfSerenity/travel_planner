@@ -9,6 +9,7 @@ gem 'devise'
 gem 'responders'
 gem 'pundit'
 gem 'rack-cors'
+gem 'geocoder'
 
 group :development, :test do
   gem 'factory_girl_rails'
