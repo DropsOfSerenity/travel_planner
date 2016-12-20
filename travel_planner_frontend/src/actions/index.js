@@ -3,7 +3,9 @@ import {
   SET_AUTH,
   SENDING_REQUEST,
   LOGIN_REQUEST,
-  REGISTER_REQUEST,
+  REGISTER,
+  REGISTER_CHANGE_FORM,
+  RESET_REGISTER,
   LOGOUT,
   REQUEST_ERROR,
   CLEAR_ERROR,
@@ -19,8 +21,21 @@ import {
   RESET_EDIT_TRIP,
   EDIT_TRIP_FETCH,
   EDIT_TRIP,
-  EDIT_TRIP_CHANGE_FORM
+  EDIT_TRIP_CHANGE_FORM,
+  FETCH_TRIP_PLAN,
 } from './constants'
+
+export function registerRequest(data) {
+  return {type: REGISTER, data}
+}
+
+export function resetRegister() {
+  return {type: RESET_REGISTER}
+}
+
+export function registerChangeForm(newFormState) {
+  return {type: REGISTER_CHANGE_FORM, newFormState}
+}
 
 export function changeForm(newFormState) {
   return {type: CHANGE_FORM, newFormState}
@@ -48,10 +63,6 @@ export function clearError () {
 
 export function logout () {
   return {type: LOGOUT}
-}
-
-export function registerRequest () {
-  return {type: REGISTER_REQUEST}
 }
 
 export function fetchTrips () {
@@ -104,4 +115,8 @@ export function editTripChangeForm (newFormState) {
 
 export function editTrip (id, data) {
   return {type: EDIT_TRIP, id, data: {trip: {...data}}}
+}
+
+export function fetchTripPlan () {
+  return {type: FETCH_TRIP_PLAN}
 }

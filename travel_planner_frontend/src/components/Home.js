@@ -1,18 +1,18 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
 class Home extends Component {
   render() {
     return (
-      <h1>Home</h1>
+      <div className="flex">
+        <section id="intro">
+          <h1>Track your travel</h1>
+          <p>Never lose track of the places you go.</p>
+          <Link to='/register' className='btn'>Sign up today</Link>
+        </section>
+      </div>
     )
   }
 }
 
-function select (state) {
-  return {
-    data: state
-  }
-}
-
-export default connect(select)(Home)
+export default Home

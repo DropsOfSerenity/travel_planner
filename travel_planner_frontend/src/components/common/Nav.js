@@ -19,7 +19,8 @@ class Nav extends Component {
       // logged in 
       navButtons = (
         <div>
-          <Link to='/trip/new' className='btn btn-nav btn-nav__text'>New Trip</Link>
+          <Link to='/trip_plan' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>Trip Plan</Link>
+          <Link to='/trip/new' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>New Trip</Link>
           <a href="#" onClick={this._logout} className='btn btn-nav'>Logout</a>
         </div>
       )
@@ -27,8 +28,8 @@ class Nav extends Component {
       // not logged in
       navButtons = (
         <div>
-          <Link to='/register' className='btn btn-nav'>Register</Link>
-          <Link to='/login' className='btn btn-nav'>Login</Link>
+          <Link to='/register' className='btn btn-nav' activeClassName='btn-active'>Register</Link>
+          <Link to='/login' className='btn btn-nav' activeClassName='btn-active'>Login</Link>
         </div>
       )
     }

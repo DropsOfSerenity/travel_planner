@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
-import {loginRequest, changeForm, clearError} from '../actions'
+import {registerRequest, registerChangeForm, resetRegister} from '../actions'
 import ErrorMessage from './common/ErrorMessage'
 import {Link} from 'react-router'
 
-class Login extends Component {
+class Register extends Component {
   constructor (props) {
     super(props)
 
@@ -15,39 +15,39 @@ class Login extends Component {
   }
 
   componentWillMount () {
-    this.props.dispatch(clearError());
+    this.props.dispatch(resetRegister());
   }
 
   _onSubmit (e) {
     e.preventDefault()
-    this.props.dispatch(loginRequest({
-      email: this.props.data.auth.formState.email,
-      password: this.props.data.auth.formState.password
+    this.props.dispatch(registerRequest({
+      email: this.props.data.user.email,
+      password: this.props.data.user.password
     }))
   }
 
   _changeEmail (e) {
-    this.props.dispatch(changeForm({
-      ...this.props.data.auth.formState, email: e.target.value
+    this.props.dispatch(registerChangeForm({
+      ...this.props.data.user, email: e.target.value
     }))
   }
 
   _changePassword (e) {
-    this.props.dispatch(changeForm({
-      ...this.props.data.auth.formState, password: e.target.value
+    this.props.dispatch(registerChangeForm({
+      ...this.props.data.user, password: e.target.value
     }))
   }
 
   render () {
     
-    let {formState, error} = this.props.data.auth
+    let {user, error} = this.props.data
 
     return (
       <div className='form-page__wrapper'>
         <div className='form-page__form-wrapper'>
           <div className='form-page__form-header'>
-            <h2 className='form-page__form-heading'>Welcome back to Tripr</h2>
-            <p className='form-page__form-subheading'>Log back in to keep up with your upcoming trips!</p>
+            <h2 className='form-page__form-heading'>Welcome to Tripr</h2>
+            <p className='form-page__form-subheading'>Sign up now and get started tracking your future vacations. For free!</p>
           </div>
 
           <form className='form' onSubmit={this._onSubmit}> 
@@ -57,7 +57,7 @@ class Login extends Component {
                 className='form__field-input'
                 type='text'
                 id='email'
-                value={formState.email}
+                value={user.email}
                 onChange={this._changeEmail}
                 placeholder='email@example.com' />
                 <label className="form__field-label" htmlFor='email'>
@@ -71,7 +71,7 @@ class Login extends Component {
                 type='password'
                 id='password'
                 onChange={this._changePassword}
-                value={formState.password}
+                value={user.password}
                 placeholder='password' />
                 <label className='form__field-label' htmlFor='password'>
                   Password
@@ -80,14 +80,14 @@ class Login extends Component {
 
             <div className="form__actions-wrapper">
               <button className='btn form__actions-button' type='submit'>
-                Login
+                Sign me up!
               </button>
             </div>
 
             <div className="form__actions-extra">
               <p>
-                Don't have an account yet?
-                &nbsp;<Link to='/register'>Create one</Link>
+                Already have an account?
+                &nbsp;<Link to='/login'>Log in</Link>
               </p>
             </div>
           </form>          
@@ -99,8 +99,8 @@ class Login extends Component {
 
 function select (state) {
   return {
-    data: state
+    data: state.auth.register
   }
 }
 
-export default connect(select)(Login)
+export default connect(select)(Register)

@@ -3,8 +3,8 @@ import {connect} from 'react-redux'
 import Spinner from 'react-spinkit'
 import {DateRangePicker} from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
-import ErrorMessage from './ErrorMessage'
-import {newTrip, resetNewTrip, newTripChangeForm} from '../actions/index'
+import ErrorMessage from './common/ErrorMessage'
+import {newTrip, resetNewTrip, newTripChangeForm} from '../actions'
 import Textarea from 'react-textarea-autosize';
 import Geosuggest from 'react-geosuggest';
 
@@ -113,7 +113,7 @@ class NewTrip extends Component {
             <div className="form__actions-wrapper">
               <button className='btn form__actions-button' type='submit' disabled={loading}>
                 {loading ? 
-                   <Spinner spinnerName='three-bounce' noFadeIn /> 
+                   <Spinner spinnerName='three-bounce' className='white' noFadeIn /> 
                   : 'Create Trip' }
               </button>
             </div>

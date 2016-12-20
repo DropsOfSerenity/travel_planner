@@ -6,22 +6,21 @@ import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import sagas from './sagas/index'
 import createLogger from 'redux-logger';
+import { Router, Route, browserHistory } from 'react-router'
 
 import './index.css';
-
-import {clearError} from './actions/index'
 
 import App from './components/App';
 import Home from './components/Home';
 import Login from './components/Login';
+import Register from './components/Register';
 import TripList from './components/TripList';
 import NewTrip from './components/NewTrip';
 import TripDetail from './components/TripDetail';
 import TripEdit from './components/TripEdit';
+import TripPlan from './components/TripPlan';
 
 import tripApp from './reducers'
-
-import { Router, Route, browserHistory } from 'react-router'
 
 const logger = createLogger();
 let sagaMiddleware = createSagaMiddleware()
@@ -44,10 +43,6 @@ function ensureLoggedOut (nextState, replace) {
   }
 }
 
-browserHistory.listen( location =>  {
-  store.dispatch(clearError())
-});
-
 const router = (
   <Provider store={store}>
     <Router history={browserHistory}>
@@ -57,10 +52,12 @@ const router = (
           <Route path="/trip/new" component={NewTrip}></Route>
           <Route path="/trip/:tripId" component={TripDetail}></Route>
           <Route path="/trip/:tripId/edit" component={TripEdit}></Route>
+          <Route path="/trip_plan" component={TripPlan}></Route>
         </Route>
         <Route onEnter={ensureLoggedOut}>
           <Route path="/" component={Home}></Route>
           <Route path="/login" component={Login}></Route>
+          <Route path="/register" component={Register}></Route>
         </Route>
       </Route>
     </Router>

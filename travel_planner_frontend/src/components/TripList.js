@@ -5,23 +5,7 @@ import {fetchTrips} from '../actions/index'
 import {Link} from 'react-router'
 import Spinner from 'react-spinkit'
 import TripListFilters from './TripListFilters'
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
-
-const ListGoogleMap = withGoogleMap(props => (
-  <GoogleMap
-    ref={props.onMapLoad}
-    defaultZoom={3}
-    defaultCenter={props.defaultCenter}
-    onClick={props.onMapClick}
-  >
-    {props.markers.map((marker, index) => (
-      <Marker
-        {...marker}
-        onRightClick={() => props.onMarkerRightClick(index)}
-      />
-    ))}
-  </GoogleMap>
-));
+import GMap from './common/GMap'
 
 class TripList extends Component {
 
@@ -73,34 +57,34 @@ class TripList extends Component {
     }
 
     return (
-      <div className="trip-page__wrapper">
-        <TripListFilters />
-        <div className="trip-page__list-wrapper">
-          {this.filteredTrips().map(trip =>
-            <article className="trip-item__wrapper" key={trip.id}>
-              <Link to={'/trip/' + trip.id} className="trip-item">
-                <div className="trip-item__title">
-                  <span className="trip-item__title-text">{trip.destination}</span>
-                  <ListGoogleMap
-                    containerElement={
-                      <div className="trip-item__map-container" />
+      <div className="wrap">
+        <div className="trip-page__wrapper">
+          <TripListFilters />
+          <div className="trip-page__list-wrapper">
+            {this.filteredTrips().map(trip =>
+              <article className="trip-item__wrapper" key={trip.id}>
+                <Link to={'/trip/' + trip.id} className="trip-item">
+                  <div className="trip-item__title">
+                    <span className="trip-item__title-text">{trip.destination}</span>
+                    { trip.longitude && trip.latitude ? 
+                      <GMap
+                        containerElement={ <div className="trip-item__map-container" /> }
+                        mapElement={ <div className='trip-item__map'/> }
+                        defaultCenter={{lat: trip.latitude, lng: trip.longitude}}
+                        markers={[{position: {lat: trip.latitude, lng: trip.longitude}, key: trip.destination}]} />
+                      : ''
                     }
-                    mapElement={
-                      <div className='trip-item__map'/>
-                    }
-                    defaultCenter={{lat: trip.latitude, lng: trip.longitude}}
-                    markers={[{position: {lat: trip.latitude, lng: trip.longitude}, key: trip.destination}]}>
-                  </ListGoogleMap>
-                </div>
+                  </div>
 
-                <div className="trip-item__info">
-                  <div className='trip-item__time-until'>{this.timeUntil(trip.start_date)}</div>
-                  <span className='trip-item__start-date'>{this.dateFormat(trip.start_date)}</span>
-                </div>
-                
-              </Link>
-            </article>
-          )}
+                  <div className="trip-item__info">
+                    <div className='trip-item__time-until'>{this.timeUntil(trip.start_date)}</div>
+                    <span className='trip-item__start-date'>{this.dateFormat(trip.start_date)}</span>
+                  </div>
+                  
+                </Link>
+              </article>
+            )}
+          </div>
         </div>
       </div>
     )

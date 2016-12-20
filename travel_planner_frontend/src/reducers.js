@@ -6,11 +6,18 @@ import {
   REQUEST_ERROR,
   CLEAR_ERROR,
 
+  REGISTER, REGISTER_SUCCESS, REGISTER_ERROR, RESET_REGISTER, REGISTER_CHANGE_FORM,
+
   FETCH_TRIPS,
   FETCH_TRIPS_SUCCESS,
   FETCH_TRIPS_ERROR,
   RESET_TRIPS,
   TRIPS_FILTER,
+
+  FETCH_TRIP_PLAN,
+  FETCH_TRIP_PLAN_SUCCESS,
+  FETCH_TRIP_PLAN_ERROR,
+  RESET_TRIP_PLAN,
 
   NEW_TRIP,
   NEW_TRIP_SUCCESS,
@@ -32,11 +39,12 @@ import {
   EDIT_TRIP_FETCH_SUCCESS,
   EDIT_TRIP_FETCH_ERROR
 } from './actions/constants'
+
 let initialState = {
   isAuthenticated: localStorage.getItem('access_token') ? true : false,
-  formState: {email: '', password: ''}
+  formState: {email: '', password: ''},
+  register: {user: {email: '', password: ''}, error: null, loading: false}
 };
-
 function auth(state = initialState, action) {
   switch (action.type) {
     case CHANGE_FORM:
@@ -49,6 +57,18 @@ function auth(state = initialState, action) {
       return {...state, error: action.error}
     case CLEAR_ERROR:
       return {...state, error: ''}
+
+    case REGISTER:
+      return {...state, register: {...state.register, loading: true}}
+    case REGISTER_SUCCESS:
+      return {...state, register: {user: {email: '', password: ''}, error: null, loading: false}}
+    case REGISTER_ERROR:
+      return {...state, register: {...state.register, error: action.error, loading: false}}
+    case RESET_REGISTER:
+      return {...state, register: {user: {email: '', password: ''}, error: null, loading: false}}
+    case REGISTER_CHANGE_FORM:
+      return {...state, register: {...state.register, user: action.newFormState}}
+
     default:
       return state;
   }
@@ -58,11 +78,21 @@ let initialTrips = {
   tripsList: {trips: [], error: null, loading: false, searchText: ''},
   activeTrip: {trip: null, loading: false, error: null},
   newTrip: {trip: {destination: '', start_date: null, end_date: null, comment: ''}, error: null, loading: false},
-  editTrip: {trip: null, loading: false, error: null}
+  editTrip: {trip: null, loading: false, error: null},
+  tripPlan: {trips: [], error: null, loading: false}
 }
 
 function trips(state = initialTrips, action) {
   switch (action.type) {
+    case FETCH_TRIP_PLAN:
+      return {...state, tripPlan: {...state.tripPlan, loading: true}}
+    case FETCH_TRIP_PLAN_SUCCESS:
+      return {...state, tripPlan: {trips: action.trips, error: null, loading: false}}
+    case FETCH_TRIP_PLAN_ERROR:
+      return {...state, tripPlan: {trips: [], error: action.error, loading: false}}
+    case RESET_TRIP_PLAN:
+      return {...state, tripPlan: {trips: [], error: null, loading: false}}
+
     case FETCH_TRIPS:
       return {...state, tripsList: {...state.tripsList, loading: true}}
     case FETCH_TRIPS_SUCCESS:

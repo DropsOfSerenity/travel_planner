@@ -44,16 +44,17 @@ class TripList extends Component {
     }
 
     return (
-      <article>
-        <h2>My 5 day trip</h2>
-        <h2>{trip.destination}</h2>
-        <p>Trip Starts on {this.dateFormat(trip.start_date)}</p>
-        <p>Trip Ends on {this.dateFormat(trip.end_date)}</p>
-        <p>Trip Duration: {this.tripLength(trip)}</p>
-        <p className="trip-item__comment">{trip.comment || 'No comments.'}</p>
-        <Link to={`/trip/${trip.id}/edit`} >Edit</Link>
-        <a href="#" onClick={this._delete.bind(this, trip.id)}>Delete</a>
-      </article>
+      <div className="wrap">
+        <article>
+          <h2>My {this.tripLength(trip)} trip</h2>
+          <h4>{trip.destination}</h4>
+          <p>Trip Starts on {this.dateFormat(trip.start_date)}</p>
+          <p>Trip Ends on {this.dateFormat(trip.end_date)}</p>
+          <p className="trip-item__comment">{trip.comment || 'No comments.'}</p>
+          <Link to={`/trip/${trip.id}/edit`} >Edit</Link>
+          <a href="#" onClick={this._delete.bind(this, trip.id)}>Delete</a>
+        </article>
+      </div>
     )
   }
 }

@@ -5,7 +5,7 @@ import Nav from './common/Nav'
 class App extends Component {
   render() {
     return (
-      <div className='wrap'>
+      <div className="height-100">
         <Nav isAuthenticated={this.props.data.auth.isAuthenticated}
              currentlySending={this.props.data.currentlySending}
              history={this.props.history}

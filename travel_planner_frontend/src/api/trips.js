@@ -18,6 +18,22 @@ let trips = {
     })
   },
 
+  fetchTripPlan () {
+    if (!auth.isAuthenticated()) return Promise.reject(false)
+
+    return request.get('http://localhost:3001/v1/plans', {
+      headers: {
+        'Authorization': localStorage.access_token
+      }
+    })
+    .then(response => {
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      return Promise.reject(false)
+    })
+  },
+
   newTrip (data) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
