@@ -19,8 +19,8 @@ class Nav extends Component {
       // logged in 
       navButtons = (
         <div>
+          <Link to='/dash' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>My Trips</Link>
           <Link to='/trip_plan' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>Trip Plan</Link>
-          <Link to='/trip/new' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>New Trip</Link>
           <a href="#" onClick={this._logout} className='btn btn-nav'>Logout</a>
         </div>
       )

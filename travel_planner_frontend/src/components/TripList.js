@@ -47,7 +47,6 @@ class TripList extends Component {
 
   render() {
     const { loading } = this.props.data
-
     if (loading) {
       return (
         <div className='form-page__wrapper'>
@@ -61,6 +60,20 @@ class TripList extends Component {
         <div className="trip-page__wrapper">
           <TripListFilters />
           <div className="trip-page__list-wrapper">
+
+            <article className="trip-item__wrapper">
+              <Link to='/trip/new' className="trip-item">
+                <div className="trip-item__title trip-item__new">
+                  My next vacation
+                </div>
+
+                <div className="trip-item__info">
+                  <div className='trip-item__time-until'>Click me to add a new trip</div>
+                </div>
+                
+              </Link>
+            </article>
+
             {this.filteredTrips().map(trip =>
               <article className="trip-item__wrapper" key={trip.id}>
                 <Link to={'/trip/' + trip.id} className="trip-item">

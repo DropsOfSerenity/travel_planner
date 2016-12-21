@@ -44,16 +44,42 @@ class TripList extends Component {
     }
 
     return (
-      <div className="wrap">
-        <article>
-          <h2>My {this.tripLength(trip)} trip</h2>
-          <h4>{trip.destination}</h4>
-          <p>Trip Starts on {this.dateFormat(trip.start_date)}</p>
-          <p>Trip Ends on {this.dateFormat(trip.end_date)}</p>
-          <p className="trip-item__comment">{trip.comment || 'No comments.'}</p>
-          <Link to={`/trip/${trip.id}/edit`} >Edit</Link>
-          <a href="#" onClick={this._delete.bind(this, trip.id)}>Delete</a>
-        </article>
+      <div>
+        <div className="trip-header__wrapper">
+          <div className="max-768">
+            <h1>My {this.tripLength(trip)} trip</h1>
+          </div>
+        </div>
+        <div className="max-768 panel">
+          
+          <table className="table">
+            <tbody>
+              <tr>
+                <th>Destination</th>
+                <td>{trip.destination}</td>
+              </tr>
+              <tr>
+                <th>Start Date</th>
+                <td>{this.dateFormat(trip.start_date)}</td>
+              </tr>
+              <tr>
+                <th>End Date</th>
+                <td>{this.dateFormat(trip.end_date)}</td>
+              </tr>
+              { !!trip.comment &&
+                <tr>
+                  <th>Comment</th>
+                  <td>{trip.comment}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div className="panel-actions">
+            <Link to={`/trip/${trip.id}/edit`} className="btn">Edit</Link>&nbsp;
+            <a href="#" className="btn" onClick={this._delete.bind(this, trip.id)}>Delete</a>
+          </div>
+        </div>
+
       </div>
     )
   }

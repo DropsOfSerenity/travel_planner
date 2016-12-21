@@ -27,6 +27,12 @@ class TripPlan extends Component {
     }
   }
 
+  tripLength(trip) {
+    let start = moment(trip.start_date)
+    let end = moment(trip.end_date)
+    return `${end.diff(start, 'days')} day trip`
+  }
+
   print (e) {
     e.preventDefault()
     window.print()
@@ -47,19 +53,33 @@ class TripPlan extends Component {
 
     return (
       <div>
-        <h1>Your 1 month trip plan</h1>
-        <a href='#' className='btn print-btn' onClick={this.print.bind(this)}>Print your trip plan</a>
-        {trips.map(trip =>
-          <div>
-          <ul key={trip.id} style={{width: '100%'}}>
-            <h2>{trip.destination}</h2>
-            <li><b>Starts:</b> {this.timeUntil(trip.start_date)} on {this.dateFormat(trip.start_date)}</li>
-            <li><b>Ends:</b> on {this.dateFormat(trip.end_date)}</li>
-            <p>{trip.comment}</p>
-          </ul>
-          <hr/>
+        <div className="trip-header__wrapper">
+          <div className="max-768">
+            <h1>Your 1 month trip plan</h1>
           </div>
-        )}
+        </div>
+        <div className='max-768 trip-plan__wrapper'>
+          <a href='#' className='btn print-btn' onClick={this.print.bind(this)}>Print my trip plan</a>
+          
+          {trips.map(trip =>
+            <div key={trip.id} className='trip-plan__trip'>
+              <div className="trip-plan__duration">
+                <span>{this.tripLength(trip)}</span>
+              </div>
+              <div className="trip-plan__trip-destination">{trip.destination}</div>
+              <div className="trip-plan__trip-leaving">
+                Departing on {this.dateFormat(trip.start_date)}
+              </div>
+              { trip.comment ?
+                <div className="trip-plan__trip-comments">
+                  <span>{trip.comment}</span>
+                </div>
+                : ''
+              }
+              <div className="trip-plan__trip-returning">Returning on {this.dateFormat(trip.end_date)}</div>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

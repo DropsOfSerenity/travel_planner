@@ -8,6 +8,7 @@ import {editTripFetch, editTrip, editTripChangeForm} from '../actions/index'
 import Textarea from 'react-textarea-autosize';
 import Geosuggest from 'react-geosuggest';
 import moment from 'moment';
+import {Link} from 'react-router'
 
 class TripEdit extends Component {
   constructor (props) {
@@ -87,6 +88,7 @@ class TripEdit extends Component {
         <div className="form-page__form-wrapper">
           <div className='form-page__form-header'>
             <h2 className='form-page__form-heading'>Edit your trip</h2>
+            <p className='form-page__form-subheading'>or go <Link to={'/trip/' + trip.id}>back to your trip</Link></p>
           </div>
           <form className='form' onSubmit={this._onSubmit}>
             {error ? <ErrorMessage error={error} /> : null}

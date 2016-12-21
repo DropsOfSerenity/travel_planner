@@ -1,10 +1,12 @@
 import request from 'axios'
 
+import {API_ROOT} from './constants'
+
 let auth = {
   login (email, password) {
     if (auth.isAuthenticated()) return Promise.resolve(true)
 
-    return request.post('http://localhost:3001/v1/login', {email, password})
+    return request.post(`${API_ROOT}/v1/login`, {email, password})
       .then(response => {
         localStorage.access_token = response.data.access_token
         return Promise.resolve(true)
@@ -17,7 +19,7 @@ let auth = {
   register (email, password) {
     if (auth.isAuthenticated()) return Promise.resolve(true)
 
-    return request.post('http://localhost:3001/v1/users', {user: {email, password}})
+    return request.post(`${API_ROOT}/v1/users`, {user: {email, password}})
       .then(response => {
         localStorage.access_token = response.data.access_token
         return Promise.resolve(response.data)

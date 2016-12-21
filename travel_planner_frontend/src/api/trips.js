@@ -1,11 +1,12 @@
 import request from 'axios'
 import auth from './auth'
+import {API_ROOT} from './constants'
 
 let trips = {
   fetchTrips () {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.get('http://localhost:3001/v1/trips', {
+    return request.get(`${API_ROOT}/v1/trips`, {
       headers: {
         'Authorization': localStorage.access_token
       }
@@ -21,7 +22,7 @@ let trips = {
   fetchTripPlan () {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.get('http://localhost:3001/v1/plans', {
+    return request.get(`${API_ROOT}/v1/plans`, {
       headers: {
         'Authorization': localStorage.access_token
       }
@@ -37,7 +38,7 @@ let trips = {
   newTrip (data) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.post('http://localhost:3001/v1/trips', 
+    return request.post(`${API_ROOT}/v1/trips`, 
       data.data,
       { 
         headers: {
@@ -56,7 +57,7 @@ let trips = {
   editTrip (id, data) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.patch(`http://localhost:3001/v1/trips/${id}`, 
+    return request.patch(`${API_ROOT}/v1/trips/${id}`, 
       data,
       { 
         headers: {
@@ -75,7 +76,7 @@ let trips = {
   deleteTrip (id) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.delete(`http://localhost:3001/v1/trips/${id}`, {
+    return request.delete(`${API_ROOT}/v1/trips/${id}`, {
       headers: {
         'Authorization': localStorage.access_token
       }
@@ -90,7 +91,7 @@ let trips = {
   fetchTrip (id) {
     if (!auth.isAuthenticated()) return Promise.reject(false)
 
-    return request.get(`http://localhost:3001/v1/trips/${id}`, {
+    return request.get(`${API_ROOT}/v1/trips/${id}`, {
       headers: {
         'Authorization': localStorage.access_token
       }
