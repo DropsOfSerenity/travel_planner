@@ -185,6 +185,7 @@
   .nav__user-email {
     color: #999;
     font-size: 0.8em;
+    padding: 0 16px;
   }
 
   .btn-nav {
@@ -455,6 +456,13 @@
     height: 48px;
     overflow: hidden;
     background: #fafafa;
+  }
+
+  .trip-item__header {
+    padding: 16px;
+    background: #fafafa;
+    color: #333;
+    font-size: 0.9em;
   }
 
   .white.three-bounce > div {

@@ -63,6 +63,11 @@ class TripList extends Component {
 
             <article className="trip-item__wrapper">
               <Link to='/trip/new' className="trip-item">
+                {this.props.me && this.props.me.role === 'admin' &&
+                  <div className="trip-item__header">
+                    &nbsp;
+                  </div>
+                }
                 <div className="trip-item__title trip-item__new">
                   My next vacation
                 </div>
@@ -77,8 +82,15 @@ class TripList extends Component {
             {this.filteredTrips().map(trip =>
               <article className="trip-item__wrapper" key={trip.id}>
                 <Link to={'/trip/' + trip.id} className="trip-item">
+                  {this.props.me && this.props.me.role === 'admin' &&
+                    <div className="trip-item__header">
+                      {trip.user_email}
+                    </div>
+                  }
                   <div className="trip-item__title">
-                    <span className="trip-item__title-text">{trip.destination}</span>
+                    <span className="trip-item__title-text">
+                      {trip.destination}
+                    </span>
                     { trip.longitude && trip.latitude ? 
                       <GMap
                         containerElement={ <div className="trip-item__map-container" /> }
@@ -107,6 +119,7 @@ class TripList extends Component {
 function select (state) {
   return {
     data: state.trips.tripsList,
+    me: state.auth.user
   }
 }
 

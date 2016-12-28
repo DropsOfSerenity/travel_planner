@@ -13,9 +13,9 @@
 ActiveRecord::Schema.define(version: 20161219201510) do
 
   create_table "trips", force: :cascade do |t|
-    t.string   "destination"
-    t.date     "start_date"
-    t.date     "end_date"
+    t.string   "destination", null: false
+    t.date     "start_date",  null: false
+    t.date     "end_date",    null: false
     t.text     "comment"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
