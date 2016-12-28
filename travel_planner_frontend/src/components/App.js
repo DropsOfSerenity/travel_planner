@@ -1,8 +1,13 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Nav from './common/Nav'
+import {fetchMe} from '../actions/index'
 
 class App extends Component {
+  componentWillMount() {
+    this.props.dispatch(fetchMe())
+  }
+
   render() {
     return (
       <div className="height-100">

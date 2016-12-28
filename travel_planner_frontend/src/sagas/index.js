@@ -2,6 +2,8 @@ import {take, call, put, fork} from 'redux-saga/effects'
 import {browserHistory} from 'react-router'
 import auth from '../api/auth'
 import trips from '../api/trips'
+import users from '../api/users'
+import {toastr} from 'react-redux-toastr'
 
 import {
   LOGIN_REQUEST,
@@ -17,10 +19,33 @@ import {
   FETCH_TRIP, FETCH_TRIP_SUCCESS, FETCH_TRIP_ERROR,
   EDIT_TRIP, EDIT_TRIP_ERROR, EDIT_TRIP_SUCCESS, 
   EDIT_TRIP_FETCH, EDIT_TRIP_FETCH_SUCCESS, EDIT_TRIP_FETCH_ERROR,
-  FETCH_TRIP_PLAN, FETCH_TRIP_PLAN_SUCCESS, FETCH_TRIP_PLAN_ERROR
+  FETCH_TRIP_PLAN, FETCH_TRIP_PLAN_SUCCESS, FETCH_TRIP_PLAN_ERROR,
+  FETCH_ME, FETCH_ME_SUCCESS, FETCH_ME_ERROR,
+  FETCH_USERS, FETCH_USERS_SUCCESS, FETCH_USERS_ERROR,
+  DELETE_USER, DELETE_USER_SUCCESS, DELETE_USER_ERROR,
+  EDIT_USER_FETCH, EDIT_USER_FETCH_SUCCESS, EDIT_USER_FETCH_ERROR,
+  EDIT_USER, EDIT_USER_SUCCESS, EDIT_USER_ERROR
 } from '../actions/constants'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+export function * fetchMeSaga () {
+  while (true) {
+    let request = yield take(FETCH_ME)
+    let response
+    try {
+      response = yield call(auth.me)
+    } catch (error) {
+      yield put({type: FETCH_ME_ERROR, error})
+      yield put({type: LOGOUT})
+      continue
+    }
+
+    if (response) {
+      yield put({type: FETCH_ME_SUCCESS, user: response})
+    }
+  }
+}
 
 export function * login ({email, password}) {
   yield put({type: SENDING_REQUEST, sending: true})
@@ -43,11 +68,12 @@ export function * loginSaga () {
     let {email, password} = request.data
 
     yield put({type: SENDING_REQUEST, sending: true})
-    let success = yield call(login, {email, password})
+    let response = yield call(login, {email, password})
 
-    if (success) {
-      yield put({type: SET_AUTH, newAuthState: true})
+    if (response) {
+      yield put({type: SET_AUTH, newAuthState: true, user: response})
       yield put({type: CHANGE_FORM, newFormState: {email: '', password: ''}})
+      toastr.success('Welcome', 'Successfully logged in.')
       browserHistory.push('/dash')
     }
   }
@@ -67,7 +93,7 @@ export function * registerSaga () {
     }
 
     if (response) {
-      yield put({type: SET_AUTH, newAuthState: true})
+      yield put({type: SET_AUTH, newAuthState: true, user: response})
       yield put({type: REGISTER_SUCCESS})
       browserHistory.push('/dash')
     }
@@ -79,8 +105,9 @@ export function * logoutSaga () {
   while(true) {
     yield take(LOGOUT)
     localStorage.removeItem('access_token')
-    yield put({type: SET_AUTH, newAuthState: false})
+    yield put({type: SET_AUTH, newAuthState: false, user: {}})
     yield put({type: RESET_TRIPS})
+    toastr.success('Logged out')
     browserHistory.push('/')
   }
 }
@@ -116,6 +143,7 @@ export function * newTripSaga() {
     
     if (response) {
       yield put({type: NEW_TRIP_SUCCESS, trip: response})
+      toastr.success('New Trip', 'Trip created successfully.')
       browserHistory.push('/dash')
     }
   }
@@ -136,6 +164,7 @@ export function * deleteTripSaga() {
 
     if (response) {
       browserHistory.push('/dash')
+      toastr.success('Trip Deleted', 'Trip deleted successfully.')
     }
   }
 }
@@ -174,6 +203,7 @@ export function * editTripSaga () {
     
     if (response) {
       yield put({type: EDIT_TRIP_SUCCESS, trip: response})
+      toastr.success('Trip Edited', 'Trip edited successfully.')
       browserHistory.push('/dash')
     }
   }
@@ -216,6 +246,85 @@ export function * fetchTripPlanSaga () {
   }
 }
 
+export function * fetchUsersSaga () {
+  while(true) {
+    yield take(FETCH_USERS)
+
+    let response
+    try {
+      response = yield call(users.fetchUsers)
+    } catch (error) {
+      yield put({type: FETCH_USERS_ERROR, error})
+    }
+    
+    if (response) {
+      yield put({type: FETCH_USERS_SUCCESS, users: response})
+    }
+  }
+}
+
+export function * deleteUserSaga () {
+  while(true) {
+    let request = yield take(DELETE_USER)
+
+    let response
+    try {
+      response = yield call(users.deleteUser, request.id)
+    } catch (error) {
+      yield put({type: DELETE_USER_ERROR, error})
+      toastr.error('Could not delete user', error)
+    }
+
+    if (response) {
+      yield put({type: DELETE_USER_SUCCESS})
+      yield put({type: FETCH_USERS})
+      toastr.success('User Deleted', `User with email ${response.email} deleted successfully.`)
+    }
+  }
+}
+
+export function * editUserFetchSaga () {
+  while(true) {
+    let request = yield take(EDIT_USER_FETCH)
+    let {id} = request
+
+    let response
+    try {
+      response = yield call(users.fetchUser, id)
+    } catch (error) {
+      yield put({type: EDIT_USER_FETCH_ERROR, error})
+      browserHistory.push('/dash')
+      continue
+    }
+
+    if (response) {
+      yield put({type: EDIT_USER_FETCH_SUCCESS, user: response})
+    }
+
+  }
+}
+
+export function * editUserSaga () {
+  while(true) {
+    let request = yield take(EDIT_USER)
+    let {id, data} = request
+
+    let response
+    try {
+      response = yield call(users.editUser, id, data)
+    } catch (error) {
+      yield put({type: EDIT_USER_ERROR, error})
+      continue
+    }
+
+    if (response) {
+      yield put({type: EDIT_USER_SUCCESS, user: response})
+      toastr.success('User Edited', 'User edited successfully.')
+      browserHistory.push('/users')
+    }
+  }
+}
+
 export default function * root () {
   yield fork(registerSaga)
   yield fork(loginSaga)
@@ -227,4 +336,9 @@ export default function * root () {
   yield fork(editTripSaga)
   yield fork(editTripFetchSaga)
   yield fork(fetchTripPlanSaga)
+  yield fork(fetchMeSaga)
+  yield fork(fetchUsersSaga)
+  yield fork(deleteUserSaga)
+  yield fork(editUserFetchSaga)
+  yield fork(editUserSaga)
 }

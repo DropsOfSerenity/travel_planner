@@ -39,7 +39,7 @@ class TripPlan extends Component {
   }
 
   render() {
-    let {loading, trips} = this.props.data
+    const {loading, trips} = this.props.data
 
     if (loading) {
       return (

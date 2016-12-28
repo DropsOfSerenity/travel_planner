@@ -3,7 +3,8 @@ module V1
     skip_before_action :authenticate_user!, only: [:create]
 
     def create
-      @user = User.new user_params
+      @user = User.new
+      @user.update_attributes user_params
       authorize @user
 
       if @user.save
@@ -17,12 +18,7 @@ module V1
       @user = User.find(params[:id])
       authorize @user
 
-      if current_user.admin?
-        p = admin_params
-      else
-        p = user_params
-      end
-      if @user.update(p)
+      if @user.update(user_params)
         render json: @user, serializer: V1::SessionSerializer, root: nil
       else
         render json: { error: @user.errors.full_messages.first }, status: 422
@@ -51,11 +47,7 @@ module V1
     private
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
-    end
-
-    def admin_params
-      params.require(:user).permit(:email, :password, :role)
+      permitted_attributes(@user)
     end
   end
 end

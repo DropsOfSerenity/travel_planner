@@ -2,7 +2,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :validatable
   enum role: [:user, :manager, :admin]
 
-  has_many :trips
+  has_many :trips, dependent: :destroy
 
   after_initialize :set_default_role, :if => :new_record?
   after_create :update_access_token!

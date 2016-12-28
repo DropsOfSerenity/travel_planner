@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {logout} from '../../actions/index'
+import {connect} from 'react-redux'
 
 class Nav extends Component {
   constructor (props) {
@@ -19,8 +20,12 @@ class Nav extends Component {
       // logged in 
       navButtons = (
         <div>
-          <Link to='/dash' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>My Trips</Link>
+          {this.props.data.user && this.props.data.user.role !== 'user' && 
+            <Link to='/users' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>Users</Link>
+          }
+          <Link to='/dash' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>Trips</Link>
           <Link to='/trip_plan' className='btn btn-nav btn-nav__text' activeClassName='btn-active'>Trip Plan</Link>
+          <span className='nav__user-email'>{this.props.data.user.email}</span>
           <a href="#" onClick={this._logout} className='btn btn-nav'>Logout</a>
         </div>
       )
@@ -47,4 +52,10 @@ class Nav extends Component {
   }
 }
 
-export default Nav
+function select (state) {
+  return {
+    data: state.auth,
+  }
+}
+
+export default connect(select)(Nav)

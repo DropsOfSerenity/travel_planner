@@ -31,6 +31,29 @@ describe 'Users API' do
       expect(response.code.to_i).to eq(200)
       expect(json['email']).to eq('newfunny@email.com')
     end
+
+    it 'only allows admins to update role' do
+      admin = create(:user, role: :admin)
+      user = create(:user)
+
+      patch "/v1/users/#{user.id}",
+        params: { user: { role: 'admin' } },
+        headers: { 'Authorization' => admin.access_token }
+
+      expect(response.code.to_i).to eq(200)
+      expect(json['role']).to eq('admin')
+    end
+
+    it 'does not allow manager to update role' do
+      manager = create(:user, role: :manager)
+
+      patch "/v1/users/#{manager.id}",
+        params: { user: { role: 'admin' } },
+        headers: { 'Authorization' => manager.access_token }
+
+      expect(response.code.to_i).to eq(200)
+      expect(json['role']).to eq('manager')
+    end
   end
 
   describe 'DELETE /v1/users/1' do

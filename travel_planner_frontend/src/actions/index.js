@@ -23,7 +23,37 @@ import {
   EDIT_TRIP,
   EDIT_TRIP_CHANGE_FORM,
   FETCH_TRIP_PLAN,
+  FETCH_ME,
+  FETCH_USERS,
+  DELETE_USER,
+  EDIT_USER_FETCH,
+  EDIT_USER_CHANGE_FORM,
+  EDIT_USER
 } from './constants'
+
+export function editUser (id, data) {
+  return {type: EDIT_USER, id, data}
+}
+
+export function editUserChangeForm (newFormState) {
+  return {type: EDIT_USER_CHANGE_FORM, newFormState}
+}
+
+export function editUserFetch (id) {
+  return {type: EDIT_USER_FETCH, id}
+}
+
+export function deleteUser(id) {
+  return {type: DELETE_USER, id}
+}
+
+export function fetchUsers() {
+  return {type: FETCH_USERS}
+}
+
+export function fetchMe() {
+  return {type: FETCH_ME}
+}
 
 export function registerRequest(data) {
   return {type: REGISTER, data}

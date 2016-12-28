@@ -19,11 +19,11 @@ class ApplicationController < ActionController::API
   private
 
   def user_not_authorized
-    render json: {error: 'unauthorized'}, status: 401
+    render json: {error: 'Not authorized to perform that action.'}, status: 401
   end
 
   def record_not_found(error)
-    render json: { error: 'not found' }, status: :not_found
+    render json: { error: 'Record not found' }, status: :not_found
   end
 
   def authenticate_with_token(auth_token)
