@@ -11,6 +11,7 @@ import ReduxToastr from 'react-redux-toastr'
 
 import './index.css';
 import 'react-select/dist/react-select.css';
+import 'react-dates/lib/css/_datepicker.css';
 
 import App from './components/App';
 import Home from './components/Home';

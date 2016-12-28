@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Spinner from 'react-spinkit'
 import {DateRangePicker} from 'react-dates';
-import 'react-dates/lib/css/_datepicker.css';
 import ErrorMessage from './common/ErrorMessage'
 import {editTripFetch, editTrip, editTripChangeForm} from '../actions/index'
 import Textarea from 'react-textarea-autosize';
