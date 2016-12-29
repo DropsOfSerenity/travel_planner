@@ -107,7 +107,6 @@ export function * logoutSaga () {
     localStorage.removeItem('access_token')
     yield put({type: SET_AUTH, newAuthState: false, user: {}})
     yield put({type: RESET_TRIPS})
-    toastr.success('Logged out')
     browserHistory.push('/')
   }
 }
